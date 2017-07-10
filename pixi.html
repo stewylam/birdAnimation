@@ -1,0 +1,106 @@
+<!DOCTYPE>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Hello World</title>
+</head>
+<body>
+	<script src='https://code.jquery.com/jquery-3.2.1.min.js'> </script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.2/pixi.min.js'></script>
+	<script src='pixi-tween.js'></script>
+	<script>
+		//Aliases
+		var Container = PIXI.Container,
+			autoDetectRenderer = PIXI.autoDetectRenderer,
+			loader = PIXI.loader,
+			resources = PIXI.loader.resources,
+			Sprite = PIXI.Sprite;
+
+		//Create a Pixi stage and renderer 
+		var stage = new Container(),
+			renderer = autoDetectRenderer(1200, 720, {backgroundColor: 0x0000ee});
+		document.body.appendChild(renderer.view);
+
+		//Load an image and the run the `setup` function
+		loader
+			.add("bird.png")
+			.load(setup);
+
+
+		//Define any variables that are used in more than one function
+		var bird, state;
+
+
+		function setup() {
+
+		//Create the `bird` sprite 
+		bird = new Sprite(resources["bird.png"].texture);
+		stage.addChild(bird);
+
+			//Change the sprite's position
+			bird.x = 96;
+			bird.y = 96;
+
+			 //Change the sprite's size
+			bird.width = 100;
+			bird.height = 100;
+			
+		 	//Initialize the bird's velocity variables
+			bird.vx = 0;
+			bird.vy = 0;
+
+
+			//Set the game state
+ 			state = play;
+
+						//Start the game loop
+			gameLoop();
+		}
+
+
+		function gameLoop(){
+
+			//Loop this function 60 times per second
+			requestAnimationFrame(gameLoop);
+
+			//Update the current game state:
+			state();
+
+			//Render the stage
+			renderer.render(stage);
+
+		}
+
+
+		function play() {
+			//Update the bird's velocity
+			bird.vx = 5;
+			bird.vy = 1;
+
+			//Apply the velocity values to the bird's 
+		
+			//position to make it move
+			bird.x += bird.vx;
+			// bird.y += bird.vy;
+
+/*			//Move the bird 1 pixel per frame
+			bird.x += 5;
+			bird.y += 1;
+*/
+			if (bird.x > 1280) {
+				bird.x = 0	
+			}
+
+			if (bird.x > 0 && bird.x < 200 || bird.x > 400 && bird.x < 600 || bird.x > 800 && bird.x < 1000) {
+				bird.y += bird.vy;
+			}
+
+			if (bird.x > 200 && bird.x < 400 || bird.x > 600 && bird.x < 800 || bird.x > 1000 && bird.x < 1200) {
+				bird.y -= bird.vy;
+			}
+
+		}
+	</script>
+</body>
+</html>
